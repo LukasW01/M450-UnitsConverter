@@ -2,19 +2,20 @@
 
 This is a simple units converter program written in Java that allows you to convert different units of measurement. The program is designed to be easy to use and flexible.
 
+![UI](data/img/ui.png)
+
 The program supports the following units of measurement:
 
 - Length: meters, feet, inches, centimeters, millimeters, kilometers, miles
 - Temperature: Celsius, Fahrenheit, Kelvin
 - Weight: kilograms, pounds, ounces, grams
-- Volume: liters, gallons, quarts, pints, cups, milliliters
 
 ## Features
 
 The units converter program includes the following features:
 
 - A user-friendly menu system that allows you to select the conversion type you want.
-- Input validation to ensure that only valid numbers and units are entered.
+- Input validation to ensure that only valid numbers are entered.
 - Conversion between a wide range of units for each conversion type.
 - Error handling to prevent crashes and display helpful error messages.
 

@@ -2,7 +2,13 @@
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# IDE
 .idea/
+.vscode/
 
 ### Mac OS ###
 .DS_Store
+
+# CSV
+history.csv
