@@ -31,46 +31,55 @@ public class Converter {
                 WeightUnit weightUnit = WeightUnit.create(From);
                 if (weightUnit == null) {
                     JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
-                } else convertWeight(weightUnit,To,Input);
-            } else convertImperial(imperialUnit,To,Input);
-        } else convertMetric(metricUnit,To,Input);
+                } else convertWeight(Input, weightUnit,To);
+            } else convertImperial(Input,imperialUnit,To);
+        } else convertMetric(Input,metricUnit,To);
     }
 
-    public void convertMetric(MetricUnit metricUnit, String to, double input) {
+    public void convertMetric(double input, MetricUnit metricUnit, String to) {
         Double conversionRatio = MetricUnit.getConversionRatio(metricUnit, to);
         if (conversionRatio == null) {
             JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        this.Input = input;
         this.Output = input * conversionRatio;
         this.Formula = "input * " + conversionRatio;
+        this.From = metricUnit.toString();
+        this.To = to;
 
         history.addHistory(this);
     }
 
-    public void convertImperial(ImperialUnit imperialUnit, String to, double input) {
+    public void convertImperial(double input ,ImperialUnit imperialUnit, String to) {
         Double conversionRatio = ImperialUnit.getConversionRatio(imperialUnit, to);
         if (conversionRatio == null) {
             JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        this.Input = input;
         this.Output = input * conversionRatio;
         this.Formula = "input * " + conversionRatio;
+        this.From = imperialUnit.toString();
+        this.To = to;
 
         history.addHistory(this);
     }
 
-    public void convertWeight(WeightUnit weightUnit, String to, double input) {
+    public void convertWeight(double input, WeightUnit weightUnit, String to) {
         Double conversionRatio = WeightUnit.getConversionRatio(weightUnit, to);
         if (conversionRatio == null) {
             JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        this.Input = input;
         this.Output = input * conversionRatio;
         this.Formula = "input * " + conversionRatio;
+        this.From = weightUnit.toString();
+        this.To = to;
 
         history.addHistory(this);
     }
