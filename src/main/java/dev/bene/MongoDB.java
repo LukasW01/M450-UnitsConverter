@@ -9,7 +9,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.FindIterable;
 import static com.mongodb.client.model.Filters.eq;
 
-
 public class MongoDB {
     private static MongoClient mongoClient;
     private final MongoDatabase database;

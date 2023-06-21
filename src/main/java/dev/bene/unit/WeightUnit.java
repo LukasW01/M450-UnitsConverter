@@ -1,4 +1,4 @@
-package dev.bene.model;
+package dev.bene.unit;
 
 import java.util.Map;
 import static java.util.Map.entry;

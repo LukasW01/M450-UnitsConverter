@@ -1,28 +1,29 @@
 package dev.bene;
 
-import dev.bene.model.LengthUnit;
-import dev.bene.model.WeightUnit;
+import dev.bene.unit.LengthUnit;
+import dev.bene.unit.WeightUnit;
 import javax.swing.*;
 import org.bson.Document;
 
 public class Converter {
     private double input, output;
-    private String from, to, formula;
+    private String from, to, formula, unit;
     private MongoDB mongoDB;
 
-    public Converter(double input, double output, String from, String to, String formula) {
+    public Converter(double input, double output, String from, String to, String formula, String unit) {
         this.input = input;
         this.output = output;
         this.from = from;
         this.to = to;
         this.formula = formula;
+        this.unit = unit;
     }
 
     public Converter() {
         mongoDB = new MongoDB();
     }
 
-    public void convertValue(double input, String from, String to) {
+    public void convertValue(double input, String from, String to, String unit) {
         Double conversionRatioLength = LengthUnit.getConversionRatio(from, to);
         Double conversionRatioWeight = WeightUnit.getConversionRatio(from, to);
 
@@ -30,6 +31,7 @@ public class Converter {
             this.input = input;
             this.from = from;
             this.to = to;
+            this.unit = unit;
             this.output = conversionRatioLength != null ? input * conversionRatioLength : input * conversionRatioWeight;
             this.formula = conversionRatioLength != null ? "input * " + conversionRatioLength  : "input * " + conversionRatioWeight;
 
@@ -59,13 +61,17 @@ public class Converter {
         return formula;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
     public Document toBSON() {
-        return new Document().append("history", true).append("input", input).append("output", output).append("from", from).append("to", to).append("formula", formula);
+        return new Document().append("history", true).append("input", input).append("output", output).append("from", from).append("to", to).append("formula", formula).append("unit", unit);
     }
 
     public Converter fromBSON(Document doc) {
         return new Converter(
-            doc.getDouble("input"), doc.getDouble("output"), doc.getString("from"), doc.getString("to"), doc.getString("formula")
+            doc.getDouble("input"), doc.getDouble("output"), doc.getString("from"), doc.getString("to"), doc.getString("formula"), doc.getString("unit")
         );
     }
 }

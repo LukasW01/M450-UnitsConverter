@@ -1,7 +1,8 @@
-package dev.bene;
+package dev.bene.gui;
 
-import dev.bene.model.Units;
-
+import dev.bene.CheckInput;
+import dev.bene.Converter;
+import dev.bene.unit.Units;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -24,6 +25,7 @@ public class GUI {
     private JTextField textFieldFormula;
     private GridBagConstraints gbc;
     private CheckInput documentFilter;
+    private Converter converter;
 
     public GUI() {
         frame = new JFrame("Unit Converter");
@@ -47,43 +49,7 @@ public class GUI {
         frame.add(panelBottom, BorderLayout.SOUTH);
 
         buildElements();
-
-        // Load Units into ComboBox via action listener
-        for (Units unit : Units.values()) {
-            comboBoxUnit.addItem(unit.toString());
-            for (Enum<?> enumItem : Objects.requireNonNull(unit.getUnitsByType(Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString()))) {
-                comboBoxFrom.addItem(enumItem.toString());
-                comboBoxTo.addItem(enumItem.toString());
-            }
-
-            comboBoxUnit.addActionListener(e -> {
-                comboBoxFrom.removeAllItems();
-                comboBoxTo.removeAllItems();
-
-                for (Enum<?> enumItem : Objects.requireNonNull(unit.getUnitsByType(Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString()))) {
-                    comboBoxFrom.addItem(enumItem.toString());
-                    comboBoxTo.addItem(enumItem.toString());
-                }
-            });
-        }
-
-        //action listener for buttonHistory
-        buttonHistory.addActionListener(e -> {
-            GUIHistory guiHistory = new GUIHistory();
-        });
-
-        //action listener for buttonConvert
-        buttonConvert.addActionListener(e -> {
-            if (textFieldInput.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Input is empty", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            Converter converter = new Converter();
-            converter.convertValue(Double.parseDouble(textFieldInput.getText()), Objects.requireNonNull(comboBoxFrom.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxTo.getSelectedItem()).toString());
-            textFieldOutput.setText(String.valueOf(converter.getOutput()));
-            textFieldFormula.setText(converter.getFormula());
-        });
+        logicElements();
     }
 
     public void buildElements() {
@@ -172,6 +138,42 @@ public class GUI {
         buttonHistory = new JButton("History");
         panelBottom.add(buttonConvert, BorderLayout.NORTH);
         panelBottom.add(buttonHistory, BorderLayout.SOUTH);
+    }
+
+    public void logicElements() {
+        // Load Units into ComboBox via action listener
+        for (Units unit : Units.values()) {
+            comboBoxUnit.addItem(unit.toString());
+
+            comboBoxUnit.addActionListener(e -> {
+                comboBoxFrom.removeAllItems();
+                comboBoxTo.removeAllItems();
+
+                for (Enum<?> enumItem : Objects.requireNonNull(unit.getUnitsByType(Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString()))) {
+                    comboBoxFrom.addItem(enumItem.toString());
+                    comboBoxTo.addItem(enumItem.toString());
+                }
+            });
+        }
+        comboBoxUnit.setSelectedIndex(0);
+
+        //action listener for buttonHistory
+        buttonHistory.addActionListener(e -> {
+            GUIHistory guiHistory = new GUIHistory();
+        });
+
+        //action listener for buttonConvert
+        buttonConvert.addActionListener(e -> {
+            if (textFieldInput.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Input is empty", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            converter = new Converter();
+            converter.convertValue(Double.parseDouble(textFieldInput.getText()), Objects.requireNonNull(comboBoxFrom.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxTo.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString());
+            textFieldOutput.setText(String.valueOf(converter.getOutput()));
+            textFieldFormula.setText(converter.getFormula());
+        });
     }
 
     private JLabel createLabel(String text, int fontSize) {

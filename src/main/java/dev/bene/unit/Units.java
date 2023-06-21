@@ -1,4 +1,4 @@
-package dev.bene.model;
+package dev.bene.unit;
 
 public enum Units {
     LENGTH(LengthUnit.class),

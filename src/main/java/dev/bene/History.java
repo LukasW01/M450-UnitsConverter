@@ -46,10 +46,10 @@ public class History {
 
         try {
             FileWriter writer = new FileWriter("history.csv");
-            writer.write("Input,Output,From,To,Formula\n");
+            writer.write("Input,Output,From,To,Formula,Unit\n");
             for (Converter converter : history) {
                 writer.write(
-                   converter.getInput() + "," + converter.getOutput() + "," + converter.getFrom() + "," + converter.getTo() + "," + converter.getFormula() + "\n"
+                   converter.getInput() + "," + converter.getOutput() + "," + converter.getFrom() + "," + converter.getTo() + "," + converter.getFormula() + "," + converter.getUnit() + "\n"
                 );
             }
             writer.close();

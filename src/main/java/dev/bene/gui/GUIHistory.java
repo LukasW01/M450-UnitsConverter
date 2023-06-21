@@ -1,5 +1,7 @@
-package dev.bene;
+package dev.bene.gui;
 
+import dev.bene.Converter;
+import dev.bene.History;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -46,14 +48,14 @@ public class GUIHistory {
         jTableHistory = new JTable();
         jTableHistory.setDefaultEditor(Object.class, null);
         tableModel = (DefaultTableModel) jTableHistory.getModel();
-        tableModel.setColumnIdentifiers(new String[]{"Input", "Output", "From", "To", "Formula"});
+        tableModel.setColumnIdentifiers(new String[]{"Input", "Output", "From", "To", "Formula", "Unit"});
     }
 
     public void loadHistory() {
         List<Converter> historyList = history.getHistory();
         if (historyList != null) {
             for (Converter converter : historyList) {
-                tableModel.addRow(new Object[]{converter.getInput(), converter.getOutput(), converter.getFrom(), converter.getTo(), converter.getFormula()});
+                tableModel.addRow(new Object[]{converter.getInput(), converter.getOutput(), converter.getFrom(), converter.getTo(), converter.getFormula(), converter.getUnit()});
             }
         }
     }
