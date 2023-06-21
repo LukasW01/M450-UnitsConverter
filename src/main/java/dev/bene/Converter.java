@@ -1,106 +1,71 @@
 package dev.bene;
 
-import dev.bene.model.ImperialUnit;
-import dev.bene.model.MetricUnit;
+import dev.bene.model.LengthUnit;
 import dev.bene.model.WeightUnit;
-
 import javax.swing.*;
+import org.bson.Document;
 
 public class Converter {
-    private double Input, Output;
-    private String From, To, Formula;
-    private History history;
+    private double input, output;
+    private String from, to, formula;
+    private MongoDB mongoDB;
 
-    public Converter(double Input, double Output, String From, String To, String Formula) {
-        this.Input = Input;
-        this.Output = Output;
-        this.From = From;
-        this.To = To;
-        this.Formula = Formula;
+    public Converter(double input, double output, String from, String to, String formula) {
+        this.input = input;
+        this.output = output;
+        this.from = from;
+        this.to = to;
+        this.formula = formula;
     }
 
     public Converter() {
-        history = new History();
+        mongoDB = new MongoDB();
     }
 
-    public void convertValue(double Input, String From, String To) {
-        MetricUnit metricUnit = MetricUnit.create(From);
-        if (metricUnit == null) {
-            ImperialUnit imperialUnit = ImperialUnit.create(From);
-            if (imperialUnit == null) {
-                WeightUnit weightUnit = WeightUnit.create(From);
-                if (weightUnit == null) {
-                    JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
-                } else convertWeight(Input, weightUnit,To);
-            } else convertImperial(Input,imperialUnit,To);
-        } else convertMetric(Input,metricUnit,To);
-    }
+    public void convertValue(double input, String from, String to) {
+        Double conversionRatioLength = LengthUnit.getConversionRatio(from, to);
+        Double conversionRatioWeight = WeightUnit.getConversionRatio(from, to);
 
-    public void convertMetric(double input, MetricUnit metricUnit, String to) {
-        Double conversionRatio = MetricUnit.getConversionRatio(metricUnit, to);
-        if (conversionRatio == null) {
-            JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        if (conversionRatioLength != null || conversionRatioWeight != null) {
+            this.input = input;
+            this.from = from;
+            this.to = to;
+            this.output = conversionRatioLength != null ? input * conversionRatioLength : input * conversionRatioWeight;
+            this.formula = conversionRatioLength != null ? "input * " + conversionRatioLength  : "input * " + conversionRatioWeight;
+
+            mongoDB.setHistory(toBSON());
+        } else {
+            JOptionPane.showMessageDialog(null, "Conversion not possible", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        this.Input = input;
-        this.Output = input * conversionRatio;
-        this.Formula = "input * " + conversionRatio;
-        this.From = metricUnit.toString();
-        this.To = to;
-
-        history.addHistory(this);
-    }
-
-    public void convertImperial(double input ,ImperialUnit imperialUnit, String to) {
-        Double conversionRatio = ImperialUnit.getConversionRatio(imperialUnit, to);
-        if (conversionRatio == null) {
-            JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        this.Input = input;
-        this.Output = input * conversionRatio;
-        this.Formula = "input * " + conversionRatio;
-        this.From = imperialUnit.toString();
-        this.To = to;
-
-        history.addHistory(this);
-    }
-
-    public void convertWeight(double input, WeightUnit weightUnit, String to) {
-        Double conversionRatio = WeightUnit.getConversionRatio(weightUnit, to);
-        if (conversionRatio == null) {
-            JOptionPane.showMessageDialog(null, "Invalid Unit(s)", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        this.Input = input;
-        this.Output = input * conversionRatio;
-        this.Formula = "input * " + conversionRatio;
-        this.From = weightUnit.toString();
-        this.To = to;
-
-        history.addHistory(this);
     }
 
     public double getInput() {
-        return Input;
+        return input;
     }
 
     public double getOutput() {
-        return Output;
+        return output;
     }
 
     public String getFrom() {
-        return From;
+        return from;
     }
 
     public String getTo() {
-        return To;
+        return to;
     }
 
     public String getFormula() {
-        return Formula;
+        return formula;
+    }
+
+    public Document toBSON() {
+        return new Document().append("history", true).append("input", input).append("output", output).append("from", from).append("to", to).append("formula", formula);
+    }
+
+    public Converter fromBSON(Document doc) {
+        return new Converter(
+            doc.getDouble("input"), doc.getDouble("output"), doc.getString("from"), doc.getString("to"), doc.getString("formula")
+        );
     }
 }

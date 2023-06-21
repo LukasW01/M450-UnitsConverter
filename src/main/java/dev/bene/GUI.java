@@ -1,6 +1,6 @@
 package dev.bene;
 
-import dev.bene.model.units;
+import dev.bene.model.Units;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,10 +48,23 @@ public class GUI {
 
         buildElements();
 
-        //load Units into ComboBox
-        for (units unit : units.values()) {
-            comboBoxTo.addItem(unit.toString());
-            comboBoxFrom.addItem(unit.toString());
+        // Load Units into ComboBox via action listener
+        for (Units unit : Units.values()) {
+            comboBoxUnit.addItem(unit.toString());
+            for (Enum<?> enumItem : Objects.requireNonNull(unit.getUnitsByType(Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString()))) {
+                comboBoxFrom.addItem(enumItem.toString());
+                comboBoxTo.addItem(enumItem.toString());
+            }
+
+            comboBoxUnit.addActionListener(e -> {
+                comboBoxFrom.removeAllItems();
+                comboBoxTo.removeAllItems();
+
+                for (Enum<?> enumItem : Objects.requireNonNull(unit.getUnitsByType(Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString()))) {
+                    comboBoxFrom.addItem(enumItem.toString());
+                    comboBoxTo.addItem(enumItem.toString());
+                }
+            });
         }
 
         //action listener for buttonHistory
@@ -89,7 +102,7 @@ public class GUI {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(6, 6, 6, 6);
 
-        /*
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -102,7 +115,6 @@ public class GUI {
         gbc.weightx = 1.0;
         gbc.gridwidth = 2;
         panelCenter.add(comboBoxUnit, gbc);
-         */
 
         gbc.gridx = 0;
         gbc.gridy = 2;

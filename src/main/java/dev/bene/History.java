@@ -4,12 +4,20 @@ import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.mongodb.client.FindIterable;
+import org.bson.Document;
 
 public class History {
-    private List<Converter> history;
+    private final List<Converter> history;
+    private final MongoDB mongoDB;
+    private final Converter converter;
 
     public History() {
-        history = new ArrayList<Converter>();
+        history = new ArrayList<>();
+        mongoDB = new MongoDB();
+        converter = new Converter();
+
+        loadHistory();
     }
 
     public List<Converter> getHistory() {
@@ -18,6 +26,16 @@ public class History {
 
     public void addHistory(Converter converter) {
         history.add(converter);
+    }
+
+    public void loadHistory() {
+        FindIterable<Document> historyList = mongoDB.getHistory();
+
+        if (historyList != null) {
+            for (Document doc : historyList) {
+                addHistory(converter.fromBSON(doc));
+            }
+        }
     }
 
     public void exportCSV() {
@@ -38,30 +56,6 @@ public class History {
             JOptionPane.showMessageDialog(null, "History exported to history.csv", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error writing to file", "Error", JOptionPane.ERROR_MESSAGE);
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public void importCSV()  {
-        if (new File("history.csv").exists()) {
-            return;
-        }
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("history.csv"));
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                Converter converter = new Converter(
-                        Double.parseDouble(values[0]),
-                        Double.parseDouble(values[1]),
-                        values[2],
-                        values[3],
-                        values[4]
-                );
-                history.add(converter);
-            }
-        } catch (IOException e){
             System.err.println(e.getMessage());
         }
     }

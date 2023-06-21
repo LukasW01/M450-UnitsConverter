@@ -8,15 +8,14 @@ import java.util.List;
 
 public class GUIHistory {
     private JFrame frame;
-    private JLabel jlabelTitle;
+    private JLabel jLabelTitle;
     private JButton jButtonExport;
     private JTable jTableHistory;
     private DefaultTableModel tableModel;
-    private History history;
+    private final History history;
 
     public GUIHistory() {
         history = new History();
-        history.importCSV();
 
         frame = new JFrame("History");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -29,7 +28,7 @@ public class GUIHistory {
         buildElements();
 
         frame.getContentPane().setLayout(new BorderLayout());
-        frame.getContentPane().add(jlabelTitle, BorderLayout.NORTH);
+        frame.getContentPane().add(jLabelTitle, BorderLayout.NORTH);
         frame.getContentPane().add(new JScrollPane(jTableHistory), BorderLayout.CENTER);
         frame.getContentPane().add(jButtonExport, BorderLayout.SOUTH);
 
@@ -37,9 +36,9 @@ public class GUIHistory {
     }
 
     private void buildElements() {
-        jlabelTitle = new JLabel("Conversion History");
-        jlabelTitle.setPreferredSize(new Dimension(100, 50));
-        jlabelTitle.setFont(new Font("Arial", Font.BOLD, 30));
+        jLabelTitle = new JLabel("Conversion History");
+        jLabelTitle.setPreferredSize(new Dimension(100, 50));
+        jLabelTitle.setFont(new Font("Arial", Font.BOLD, 30));
 
         jButtonExport = new JButton("Export");
         jButtonExport.addActionListener(e -> history.exportCSV());
