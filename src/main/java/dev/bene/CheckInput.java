@@ -35,7 +35,7 @@ public class CheckInput extends DocumentFilter {
         }
     }
 
-    private boolean isNumeric(String text) {
+    boolean isNumeric(String text) {
         return text.matches("[0-9]*\\.?[0-9]*");
     }
 }
