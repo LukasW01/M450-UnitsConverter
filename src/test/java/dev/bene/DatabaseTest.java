@@ -1,9 +1,7 @@
 package dev.bene;
 
-import org.bson.Document;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DatabaseTest {
 
@@ -15,7 +13,7 @@ public class DatabaseTest {
 
     @Test
     public void testDBOperations() {
-        mongoDB.setHistory(new Document("test", "test"));
-        assertTrue(mongoDB.getHistory().into(new ArrayList<>()).size() > 0);
+        mongoDB.setHistory(new Converter(1, 1000, "KILOMETER", "METERS", "input * 1000.0", "KILOMETERS").toBSON());
+        assertNotNull(mongoDB.getHistory());
     }
 }

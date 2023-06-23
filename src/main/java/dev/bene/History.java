@@ -31,10 +31,8 @@ public class History {
     public void loadHistory() {
         FindIterable<Document> historyList = mongoDB.getHistory();
 
-        if (historyList != null) {
-            for (Document doc : historyList) {
-                addHistory(converter.fromBSON(doc));
-            }
+        for (Document doc : historyList) {
+            addHistory(converter.fromBSON(doc));
         }
     }
 
@@ -49,7 +47,12 @@ public class History {
             writer.write("Input,Output,From,To,Formula,Unit\n");
             for (Converter converter : history) {
                 writer.write(
-                   converter.getInput() + "," + converter.getOutput() + "," + converter.getFrom() + "," + converter.getTo() + "," + converter.getFormula() + "," + converter.getUnit() + "\n"
+                   converter.getInput() + "," +
+                       converter.getOutput() + "," +
+                       converter.getFrom() + "," +
+                       converter.getTo() + "," +
+                       converter.getFormula() + "," +
+                       converter.getUnit() + "\n"
                 );
             }
             writer.close();

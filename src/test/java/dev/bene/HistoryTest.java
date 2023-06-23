@@ -1,6 +1,5 @@
 package dev.bene;
 
-import org.bson.Document;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
@@ -20,16 +19,18 @@ public class HistoryTest {
 
     @Test
     public void testExportCSV() {
+        history.addHistory(new Converter(1, 1000, "TON", "KILOGRAM", "input * 1000.0", "WEIGHT"));
+
         history.exportCSV();
-        assert file.exists();
+        assertTrue(file.exists());
     }
 
     @Test
-    public void testHistory() {
-        history.addHistory(new Converter(1, 1000, "KILOMETER", "METERS", "input * 1000.0", "KILOMETERS"));
-        history.loadHistory();
+    public void testLoadHistory() {
+        converter.convertValue(1,"TON", "KILOGRAM", "WEIGHT");
 
+        history.loadHistory();
         List<Converter> historyList = history.getHistory();
-        assertNotNull(historyList);
+        assertFalse(historyList.isEmpty());
     }
 }

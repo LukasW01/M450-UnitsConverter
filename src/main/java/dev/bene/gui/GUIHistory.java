@@ -55,7 +55,14 @@ public class GUIHistory {
         List<Converter> historyList = history.getHistory();
         if (historyList != null) {
             for (Converter converter : historyList) {
-                tableModel.addRow(new Object[]{converter.getInput(), converter.getOutput(), converter.getFrom(), converter.getTo(), converter.getFormula(), converter.getUnit()});
+                tableModel.addRow(new Object[]{
+                        converter.getInput(),
+                        converter.getOutput(),
+                        converter.getFrom(),
+                        converter.getTo(),
+                        converter.getFormula(),
+                        converter.getUnit()
+                });
             }
         }
     }

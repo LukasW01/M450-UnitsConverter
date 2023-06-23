@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.FindIterable;
+
 import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDB {
@@ -31,10 +32,19 @@ public class MongoDB {
     }
 
     public void setHistory(Document doc) {
-       collection.insertOne(doc);
+        try {
+            collection.insertOne(doc);
+        } catch (MongoException e) {
+            System.out.println("Error inserting document: " + e);
+        }
     }
 
     public FindIterable<Document> getHistory() {
-        return collection.find(eq("history", true));
+        try {
+            return collection.find(eq("history", true));
+        } catch (MongoException e) {
+            System.out.println("Error getting documents: " + e);
+            return null;
+        }
     }
 }

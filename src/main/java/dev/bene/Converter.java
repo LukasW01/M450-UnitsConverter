@@ -6,7 +6,7 @@ import javax.swing.*;
 import org.bson.Document;
 
 public class Converter {
-    private double input, output;
+    private Double input, output;
     private String from, to, formula, unit;
     private MongoDB mongoDB;
 
@@ -41,11 +41,11 @@ public class Converter {
         }
     }
 
-    public double getInput() {
+    public Double getInput() {
         return input;
     }
 
-    public double getOutput() {
+    public Double getOutput() {
         return output;
     }
 
@@ -66,12 +66,27 @@ public class Converter {
     }
 
     public Document toBSON() {
-        return new Document().append("history", true).append("input", input).append("output", output).append("from", from).append("to", to).append("formula", formula).append("unit", unit);
+        return new Document()
+                .append("history", true)
+                .append("input", input != null ? input : Double.valueOf(0))
+                .append("output", output != null ? output : Double.valueOf(0))
+                .append("from", from != null ? from : "")
+                .append("to", to != null ? to : "")
+                .append("formula", formula != null ? formula : "")
+                .append("unit", unit != null ? unit : "");
     }
 
     public Converter fromBSON(Document doc) {
-        return new Converter(
-            doc.getDouble("input"), doc.getDouble("output"), doc.getString("from"), doc.getString("to"), doc.getString("formula"), doc.getString("unit")
-        );
+        if (!(doc == null)) {
+            return new Converter(
+                    doc.getDouble("input"),
+                    doc.getDouble("output"),
+                    doc.getString("from"),
+                    doc.getString("to"),
+                    doc.getString("formula"),
+                    doc.getString("unit")
+            );
+        }
+        return null;
     }
 }
