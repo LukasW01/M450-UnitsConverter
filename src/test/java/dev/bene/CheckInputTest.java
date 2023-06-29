@@ -8,6 +8,10 @@ public class CheckInputTest {
 
     private CheckInput checkInput;
 
+    public CheckInputTest() {
+        checkInput = new CheckInput();
+    }
+
     @Test
     public void testIsNumeric() {
         assertTrue(checkInput.isNumeric("123"));
