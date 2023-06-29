@@ -5,11 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CheckInputTest {
-    
+
     private CheckInput checkInput;
-    private Document document;
-    private AttributeSet attr;
-    private StringBuilder sb;
 
     @Test
     public void testIsNumeric() {
