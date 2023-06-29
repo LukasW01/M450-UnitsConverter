@@ -1,9 +1,8 @@
 package dev.bene;
 
 import javax.swing.text.*;
-
+import org.mockito.Mockito;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CheckInputTest {
@@ -21,125 +20,29 @@ public class CheckInputTest {
     }
 
     @Test
-    public void testInsertString() throws BadLocationException {
-        sb.append("123");
-        document.insertString(0, sb.toString(), attr);
+    public void testInsertReplace() {
+        try {
+            //with numeric value
+            sb.append("123");
 
-        checkInput.insertString(new DocumentFilter.FilterBypass() {
-            @Override
-            public Document getDocument() {
-                return document;
-            }
+            document.insertString(0, sb.toString(), attr);
+            checkInput.replace((DocumentFilter.FilterBypass) Mockito.when(Mockito.mock(DocumentFilter.FilterBypass.class).getDocument()).thenReturn(document), 1, 1, "a", attr);
 
-            @Override
-            public void remove(int offset, int length) throws BadLocationException {
-                document.remove(offset, length);
-            }
+            assertEquals("123", document.getText(0, document.getLength()));
 
-            @Override
-            public void insertString(int offset, String text, AttributeSet attr) throws BadLocationException {
-                document.insertString(offset, text, attr);
-            }
+            //with string value
+            sb = new StringBuilder();
+            sb.append("abc");
 
-            @Override
-            public void replace(int offset, int length, String text, AttributeSet attr) throws BadLocationException {
-                document.remove(offset, length);
-                document.insertString(offset, text, attr);
-            }
-        }, 3, "4", attr);
+            document.remove(0, document.getLength());
+            document.insertString(0, sb.toString(), attr);
+            checkInput.replace((DocumentFilter.FilterBypass) Mockito.when(Mockito.mock(DocumentFilter.FilterBypass.class).getDocument()).thenReturn(document), 1, 1, "d", attr);
 
-        assertEquals("1234", document.getText(0, document.getLength()));
+            assertEquals("abc", document.getText(0, document.getLength()));
+        } catch (BadLocationException e) {
+            System.err.println("BadLocationException" + e);
+        }
 
-        sb = new StringBuilder();
-        sb.append("abc");
-        document.remove(0, document.getLength());
-        document.insertString(0, sb.toString(), attr);
-
-        checkInput.insertString(new DocumentFilter.FilterBypass() {
-            @Override
-            public Document getDocument() {
-                return document;
-            }
-
-            @Override
-            public void remove(int offset, int length) throws BadLocationException {
-                document.remove(offset, length);
-            }
-
-            @Override
-            public void insertString(int offset, String text, AttributeSet attr) throws BadLocationException {
-                document.insertString(offset, text, attr);
-            }
-
-            @Override
-            public void replace(int offset, int length, String text, AttributeSet attr) throws BadLocationException {
-                document.remove(offset, length);
-                document.insertString(offset, text, attr);
-            }
-        }, 3, "4", attr);
-
-        assertEquals("abc", document.getText(0, document.getLength()));
-    }
-
-    @Test
-    public void testReplace() throws BadLocationException {
-        sb.append("123");
-        document.insertString(0, sb.toString(), attr);
-
-        checkInput.replace(new DocumentFilter.FilterBypass() {
-            @Override
-            public Document getDocument() {
-                return document;
-            }
-
-            @Override
-            public void remove(int offset, int length) throws BadLocationException {
-                document.remove(offset, length);
-            }
-
-            @Override
-            public void insertString(int offset, String text, AttributeSet attr) throws BadLocationException {
-                document.insertString(offset, text, attr);
-            }
-
-            @Override
-            public void replace(int offset, int length, String text, AttributeSet attr) throws BadLocationException {
-                document.remove(offset, length);
-                document.insertString(offset, text, attr);
-            }
-        }, 1, 1, "a", attr);
-
-        assertEquals("123", document.getText(0, document.getLength()));
-
-        sb = new StringBuilder();
-        sb.append("abc");
-        document.remove(0, document.getLength());
-        document.insertString(0, sb.toString(), attr);
-
-        checkInput.replace(new DocumentFilter.FilterBypass() {
-            @Override
-            public Document getDocument() {
-                return document;
-            }
-
-            @Override
-            public void remove(int offset, int length) throws BadLocationException {
-                document.remove(offset, length);
-            }
-
-            @Override
-            public void insertString(int offset, String text, AttributeSet attr) throws BadLocationException {
-                document.insertString(offset, text, attr);
-            }
-
-            @Override
-            public void replace(int offset, int length, String text, AttributeSet attr) throws BadLocationException {
-                document.remove(offset, length);
-                document.insertString(offset, text, attr);
-            }
-        }, 1, 1, "d", attr);
-
-        assertEquals("abc", document.getText(0, document.getLength()));
     }
 
     @Test

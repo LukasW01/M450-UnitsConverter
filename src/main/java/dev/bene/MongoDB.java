@@ -7,7 +7,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.FindIterable;
-
 import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDB {
@@ -25,7 +24,6 @@ public class MongoDB {
     public void connectDB() {
         try {
             mongoClient = MongoClients.create("mongodb://localhost:27017");
-            System.out.println("Connected to database");
         } catch (MongoException e) {
             System.out.println("Error connecting to database: " + e);
         }
