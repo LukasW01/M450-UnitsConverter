@@ -11,38 +11,44 @@ public class CheckInputTest {
     private Document document;
     private AttributeSet attr;
     private StringBuilder sb;
+    private DocumentFilter.FilterBypass mockFilterBypass;
 
     public CheckInputTest() {
         checkInput = new CheckInput();
         document = new PlainDocument();
         attr = new SimpleAttributeSet();
         sb = new StringBuilder();
+
+        mockFilterBypass = Mockito.mock(DocumentFilter.FilterBypass.class);
     }
 
     @Test
     public void testInsertReplace() {
         try {
-            //with numeric value
+            // numeric
             sb.append("123");
-
             document.insertString(0, sb.toString(), attr);
-            checkInput.replace((DocumentFilter.FilterBypass) Mockito.when(Mockito.mock(DocumentFilter.FilterBypass.class).getDocument()).thenReturn(document), 1, 1, "a", attr);
+
+            Mockito.when(mockFilterBypass.getDocument()).thenReturn(document);
+            checkInput.insertString(mockFilterBypass, 1, "4", attr);
+            checkInput.replace(mockFilterBypass, 1, 1, "a", attr);
 
             assertEquals("123", document.getText(0, document.getLength()));
 
-            //with string value
+            // string
             sb = new StringBuilder();
             sb.append("abc");
-
             document.remove(0, document.getLength());
             document.insertString(0, sb.toString(), attr);
-            checkInput.replace((DocumentFilter.FilterBypass) Mockito.when(Mockito.mock(DocumentFilter.FilterBypass.class).getDocument()).thenReturn(document), 1, 1, "d", attr);
+
+            Mockito.when(mockFilterBypass.getDocument()).thenReturn(document);
+            checkInput.insertString(mockFilterBypass, 1, "4", attr);
+            checkInput.replace(mockFilterBypass, 1, 1, "d", attr);
 
             assertEquals("abc", document.getText(0, document.getLength()));
         } catch (BadLocationException e) {
             System.err.println("BadLocationException" + e);
         }
-
     }
 
     @Test
