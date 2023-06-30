@@ -138,6 +138,7 @@ public class GUI {
         buttonHistory = new JButton("History");
         panelBottom.add(buttonConvert, BorderLayout.NORTH);
         panelBottom.add(buttonHistory, BorderLayout.SOUTH);
+        buttonHistory.addActionListener(e -> {GUIHistory guiHistory = new GUIHistory();});
     }
 
     public void logicElements() {
@@ -157,11 +158,6 @@ public class GUI {
         }
         comboBoxUnit.setSelectedIndex(0);
 
-        //action listener for buttonHistory
-        buttonHistory.addActionListener(e -> {
-            GUIHistory guiHistory = new GUIHistory();
-        });
-
         //action listener for buttonConvert
         buttonConvert.addActionListener(e -> {
             if (textFieldInput.getText().isEmpty()) {
@@ -171,8 +167,8 @@ public class GUI {
 
             converter = new Converter();
             converter.convertValue(Double.parseDouble(textFieldInput.getText()), Objects.requireNonNull(comboBoxFrom.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxTo.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString());
-            textFieldOutput.setText(String.valueOf(converter.getOutput()));
-            textFieldFormula.setText(converter.getFormula());
+            textFieldOutput.setText(converter.getOutput() != null ? String.valueOf(converter.getOutput()) : "");
+            textFieldFormula.setText(converter.getFormula() != null ? converter.getFormula() : "");
         });
     }
 
