@@ -19,25 +19,19 @@ import static java.util.Map.entry;
 
     private static Map<String, Double> createConversionMap() {
         return Map.<String, Double>ofEntries(
-                entry("MILLIGRAM_MILLIGRAM", 1.0),
                 entry("MILLIGRAM_GRAM", 1.0 / 1000),
                 entry("MILLIGRAM_KILOGRAM", 1.0 / 1000000),
                 entry("MILLIGRAM_TON", 1.0 / 1000000000),
-                entry("GRAM_GRAM", 1.0),
                 entry("GRAM_MILLIGRAM", 1000.0),
                 entry("GRAM_KILOGRAM", 1.0 / 1000),
                 entry("GRAM_TON", 1.0 / 1000000),
-                entry("KILOGRAM_KILOGRAM", 1.0),
                 entry("KILOGRAM_MILLIGRAM", 1000000.0),
                 entry("KILOGRAM_GRAM", 1000.0),
                 entry("KILOGRAM_TON", 1.0 / 1000),
-                entry("TON_TON", 1.0),
                 entry("TON_MILLIGRAM", 1000000000.0),
                 entry("TON_GRAM", 1000000.0),
                 entry("TON_KILOGRAM", 1000.0),
-                entry("POUND_POUND", 1.0),
                 entry("POUND_OUNCE", 16.0),
-                entry("OUNCE_OUNCE", 1.0),
                 entry("OUNCE_POUND", 1.0 / 16)
         );
     }

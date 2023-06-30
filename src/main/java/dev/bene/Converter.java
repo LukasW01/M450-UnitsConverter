@@ -37,7 +37,7 @@ public class Converter {
 
             mongoDB.setHistory(toBSON());
         } else {
-            JOptionPane.showMessageDialog(null, "Conversion not possible", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Conversion not possible with these units", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
