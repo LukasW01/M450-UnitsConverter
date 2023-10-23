@@ -1,0 +1,54 @@
+image: maven:3-openjdk-17
+
+stages:
+  - sast
+  - test
+  - build
+
+variables:
+  MAVEN_OPTS: >-
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    -Dorg.slf4j.simpleLogger.showDateTime=true
+    -Djava.awt.headless=true
+
+  MAVEN_CLI_OPTS: >-
+    --batch-mode
+    --errors
+    --fail-at-end
+    --show-version
+    --no-transfer-progress
+
+cache:
+  paths:
+    - .m2/repository
+
+sast:
+  stage: sast
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+# -> (-) MongoDB
+#test:
+#  stage: test
+#  script:
+#    - 'mvn $MAVEN_CLI_OPTS verify'
+#  except:
+#    variables:
+#      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#  artifacts:
+#    when: always
+#    paths:
+#      - target/surefire-reports/maven.xml
+#      - target/failsafe-reports/maven.xml
+#    reports:
+#      junit:
+#        - target/surefire-reports/maven.xml
+#        - target/failsafe-reports/maven.xml
+
+
+build:
+  stage: build
+  script: "mvn install -B"
+
