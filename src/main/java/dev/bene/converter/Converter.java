@@ -3,9 +3,6 @@ package dev.bene.converter;
 import dev.bene.db.SQLite;
 import dev.bene.unit.LengthUnit;
 import dev.bene.unit.WeightUnit;
-import javax.swing.*;
-import org.bson.Document;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -25,7 +22,6 @@ public class Converter {
 
     public Converter() {
         sqlite = new SQLite();
-
         sqlite.connectDB();
     }
 

@@ -6,11 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DatabaseTest {
 
-    private SQLite sqlite;
-
+    private final SQLite sqlite;
 
     public DatabaseTest() {
-        //mongoDB = new MongoDB();
         sqlite = new SQLite();
     }
 

@@ -1,10 +1,6 @@
 package dev.bene.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SQLite {
 
@@ -16,9 +12,7 @@ public class SQLite {
 
     public void connectDB() {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:sqlite:unit-converter.db");
-
-            statement = connection.createStatement();
+            statement = DriverManager.getConnection("jdbc:sqlite:unit-converter.db").createStatement();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY AUTOINCREMENT, input REAL, output REAL, from_unit TEXT, to_unit TEXT, formula TEXT, unit TEXT)");
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e);
@@ -27,7 +21,14 @@ public class SQLite {
 
     public void setHistory(Double input, Double output, String from, String to, String formula, String unit) {
         try {
-            statement.executeUpdate("INSERT INTO history (input, output, from_unit, to_unit, formula, unit) VALUES ('" + input + "', '" + output + "', '" + from + "', '" + to + "', '" + formula + "', '" + unit + "')");
+            PreparedStatement preparedStatement = statement.getConnection().prepareStatement("INSERT INTO history (input, output, from_unit, to_unit, formula, unit) VALUES (?, ?, ?, ?, ?, ?)");
+            preparedStatement.setDouble(1, input);
+            preparedStatement.setDouble(2, output);
+            preparedStatement.setString(3, from);
+            preparedStatement.setString(4, to);
+            preparedStatement.setString(5, formula);
+            preparedStatement.setString(6, unit);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error inserting document: " + e);
         }
@@ -35,8 +36,7 @@ public class SQLite {
 
     public ResultSet getHistory() {
         try {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM history");
-            return resultSet;
+            return statement.executeQuery("SELECT * FROM history");
         } catch (SQLException e) {
             System.out.println("Error getting documents: " + e);
             return null;

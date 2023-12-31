@@ -7,7 +7,6 @@ This is a simple units converter program written in Java that allows you to conv
 The program supports the following units of measurement:
 
 - Length: meters, feet, inches, centimeters, millimeters, kilometers, miles
-- Temperature: Celsius, Fahrenheit, Kelvin
 - Weight: kilograms, pounds, ounces, grams
 
 ## Features
@@ -22,6 +21,18 @@ The units converter program includes the following features:
 ## Getting Started
 
 To run the program, you will need to have Java installed on your computer. You can download the latest version of Java from the Oracle website.
+
+**Maven**
+
+```bash
+mvn package
+```
+
+**Run**
+
+```bash
+java -jar target/units-converter.jar
+```
 
 ## License
 

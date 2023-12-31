@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConverterWeightTest {
 
-    private Converter converter;
+    private final Converter converter;
 
     public ConverterWeightTest() {
         converter = new Converter();

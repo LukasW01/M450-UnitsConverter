@@ -1,4 +1,4 @@
-package dev.bene.verification;
+package dev.bene.validation;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

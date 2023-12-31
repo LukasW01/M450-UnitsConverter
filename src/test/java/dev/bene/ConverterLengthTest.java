@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConverterLengthTest {
 
-    private Converter converter;
+    private final Converter converter;
 
     public ConverterLengthTest() {
         converter = new Converter();

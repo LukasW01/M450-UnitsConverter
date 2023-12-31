@@ -3,7 +3,7 @@ package dev.bene.unit;
 import java.util.Map;
 import static java.util.Map.entry;
 
-    public enum WeightUnit {
+public enum WeightUnit {
     TON,
     KILOGRAM,
     GRAM,

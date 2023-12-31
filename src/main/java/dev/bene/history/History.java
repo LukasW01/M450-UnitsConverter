@@ -1,15 +1,14 @@
 package dev.bene.history;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import dev.bene.converter.Converter;
 import dev.bene.db.SQLite;
+import dev.bene.util.Message;
 
 public class History {
     private final List<Converter> history;
@@ -46,29 +45,16 @@ public class History {
 
     public void exportCSV() {
         if (history.isEmpty()) {
-            if (GraphicsEnvironment.isHeadless()) {
-                System.err.println("History is empty");
-            } else {
-                JOptionPane.showMessageDialog(null, "History is empty", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            Message.jOptionPane("History is empty", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
             FileWriter writer = getFileWriter();
             writer.close();
-
-            if(GraphicsEnvironment.isHeadless()) {
-                System.err.println("History exported to history.csv");
-            } else {
-                JOptionPane.showMessageDialog(null, "History exported to history.csv", "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
+            Message.jOptionPane("History exported to history.csv", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
-            if (GraphicsEnvironment.isHeadless()) {
-                System.err.println("Error writing to file");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error writing to file", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            Message.jOptionPane("Error writing to file", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

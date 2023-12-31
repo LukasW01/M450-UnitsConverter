@@ -1,6 +1,7 @@
 package dev.bene.gui;
 
-import dev.bene.verification.CheckInput;
+import dev.bene.util.Message;
+import dev.bene.validation.CheckInput;
 import dev.bene.converter.Converter;
 import dev.bene.unit.Units;
 import javax.swing.*;
@@ -158,7 +159,7 @@ public class GUI {
         //action listener for buttonConvert
         buttonConvert.addActionListener(e -> {
             if (textFieldInput.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Input is empty", "Error", JOptionPane.ERROR_MESSAGE);
+                Message.jOptionPane("Input is empty", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -169,11 +170,7 @@ public class GUI {
                 textFieldOutput.setText(converter.getOutput() != null ? String.valueOf(converter.getOutput()) : "");
                 textFieldFormula.setText(converter.getFormula() != null ? converter.getFormula() : "");
             } catch (IllegalArgumentException ex) {
-                if (GraphicsEnvironment.isHeadless()) {
-                    System.out.println(ex.getMessage());
-                } else {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                Message.jOptionPane(ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
