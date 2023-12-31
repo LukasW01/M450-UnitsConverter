@@ -11,11 +11,9 @@ import javax.swing.text.AbstractDocument;
 
 public class GUI {
 
-    private JFrame frame;
-    private JPanel panelTop;
-    private JPanel panelCenter;
-    private JPanel panelBottom;
-    private JButton buttonHistory;
+    private final JPanel panelTop;
+    private final JPanel panelCenter;
+    private final JPanel panelBottom;
     private JButton buttonConvert;
     private JComboBox<String> comboBoxUnit;
     private JComboBox<String> comboBoxFrom;
@@ -23,12 +21,10 @@ public class GUI {
     private JTextField textFieldInput;
     private JTextField textFieldOutput;
     private JTextField textFieldFormula;
-    private GridBagConstraints gbc;
-    private CheckInput documentFilter;
     private Converter converter;
 
     public GUI() {
-        frame = new JFrame("Unit Converter");
+        JFrame frame = new JFrame("Unit Converter");
         frame.setVisible(true);
         frame.setSize(900, 500);
         frame.setResizable(false);
@@ -64,7 +60,7 @@ public class GUI {
         textFieldOutput = new JTextField();
         textFieldFormula = new JTextField();
 
-        gbc = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(6, 6, 6, 6);
 
@@ -96,7 +92,7 @@ public class GUI {
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        documentFilter = new CheckInput();
+        CheckInput documentFilter = new CheckInput();
         ((AbstractDocument) textFieldInput.getDocument()).setDocumentFilter(documentFilter);
         panelCenter.add(textFieldInput, gbc);
 
@@ -135,7 +131,7 @@ public class GUI {
 
         // Bottom panel
         buttonConvert = new JButton("Convert");
-        buttonHistory = new JButton("History");
+        JButton buttonHistory = new JButton("History");
         panelBottom.add(buttonConvert, BorderLayout.NORTH);
         panelBottom.add(buttonHistory, BorderLayout.SOUTH);
         buttonHistory.addActionListener(e -> {GUIHistory guiHistory = new GUIHistory();});

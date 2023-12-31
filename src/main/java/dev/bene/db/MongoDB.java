@@ -1,4 +1,4 @@
-package dev.bene;
+package dev.bene.db;
 
 import org.bson.Document;
 import com.mongodb.MongoException;

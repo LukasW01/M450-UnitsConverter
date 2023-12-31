@@ -30,22 +30,23 @@ include:
   - template: Security/Secret-Detection.gitlab-ci.yml
 
 # -> (-) MongoDB
-#test:
-#  stage: test
-#  script:
-#    - 'mvn $MAVEN_CLI_OPTS verify'
-#  except:
-#    variables:
-#      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#  artifacts:
-#    when: always
-#    paths:
-#      - target/surefire-reports/maven.xml
-#      - target/failsafe-reports/maven.xml
-#    reports:
-#      junit:
-#        - target/surefire-reports/maven.xml
-#        - target/failsafe-reports/maven.xml
+# -> (+) SQLite
+test:
+  stage: test
+  script:
+    - 'mvn $MAVEN_CLI_OPTS verify'
+  except:
+    variables:
+      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/*.xml
+      - target/failsafe-reports/*.xml
+    reports:
+      junit:
+        - target/surefire-reports/*.xml
+        - target/failsafe-reports/*.xml
 
 
 build:

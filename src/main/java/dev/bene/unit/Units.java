@@ -7,6 +7,10 @@ public enum Units {
     private Units(Class<? extends Enum<?>> enumClass) {}
 
     public Enum<?>[] getUnitsByType(String type) {
-        return type.equals("LENGTH") ? LengthUnit.values() : WeightUnit.values();
+        return switch (type) {
+            case "LENGTH" -> LengthUnit.values();
+            case "WEIGHT" -> WeightUnit.values();
+            default -> null;
+        };
     }
 }

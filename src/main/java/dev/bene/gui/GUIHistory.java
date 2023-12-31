@@ -9,7 +9,6 @@ import java.awt.*;
 import java.util.List;
 
 public class GUIHistory {
-    private JFrame frame;
     private JLabel jLabelTitle;
     private JButton jButtonExport;
     private JTable jTableHistory;
@@ -19,7 +18,7 @@ public class GUIHistory {
     public GUIHistory() {
         history = new History();
 
-        frame = new JFrame("History");
+        JFrame frame = new JFrame("History");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 550);
         frame.setLocationRelativeTo(null);
