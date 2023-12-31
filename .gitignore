@@ -15,4 +15,4 @@ history.csv
 
 #SQlite
 *.sqlite3
-.db
+*.db

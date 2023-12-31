@@ -1,7 +1,7 @@
 package dev.bene.gui;
 
-import dev.bene.Converter;
-import dev.bene.History;
+import dev.bene.converter.Converter;
+import dev.bene.history.History;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;

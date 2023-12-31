@@ -1,13 +1,14 @@
 package dev.bene.gui;
 
-import dev.bene.CheckInput;
-import dev.bene.Converter;
+import dev.bene.verification.CheckInput;
+import dev.bene.converter.Converter;
 import dev.bene.unit.Units;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
+import java.awt.GraphicsEnvironment;
 
 public class GUI {
 
@@ -161,10 +162,19 @@ public class GUI {
                 return;
             }
 
-            converter = new Converter();
-            converter.convertValue(Double.parseDouble(textFieldInput.getText()), Objects.requireNonNull(comboBoxFrom.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxTo.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString());
-            textFieldOutput.setText(converter.getOutput() != null ? String.valueOf(converter.getOutput()) : "");
-            textFieldFormula.setText(converter.getFormula() != null ? converter.getFormula() : "");
+            try {
+                converter = new Converter();
+                converter.convertValue(Double.parseDouble(textFieldInput.getText()), Objects.requireNonNull(comboBoxFrom.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxTo.getSelectedItem()).toString(), Objects.requireNonNull(comboBoxUnit.getSelectedItem()).toString());
+
+                textFieldOutput.setText(converter.getOutput() != null ? String.valueOf(converter.getOutput()) : "");
+                textFieldFormula.setText(converter.getFormula() != null ? converter.getFormula() : "");
+            } catch (IllegalArgumentException ex) {
+                if (GraphicsEnvironment.isHeadless()) {
+                    System.out.println(ex.getMessage());
+                } else {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
     }
 

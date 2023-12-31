@@ -8,9 +8,7 @@ import java.sql.Statement;
 
 public class SQLite {
 
-    private static Connection connection;
     private static Statement statement;
-    private static ResultSet resultSet;
 
     public SQLite() {
         connectDB();
@@ -18,9 +16,9 @@ public class SQLite {
 
     public void connectDB() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:unit-converter.db");
-            statement = connection.createStatement();
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:unit-converter.db");
 
+            statement = connection.createStatement();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY AUTOINCREMENT, input REAL, output REAL, from_unit TEXT, to_unit TEXT, formula TEXT, unit TEXT)");
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e);
@@ -37,17 +35,7 @@ public class SQLite {
 
     public ResultSet getHistory() {
         try {
-            resultSet = statement.executeQuery("SELECT * FROM history");
-            return resultSet;
-        } catch (SQLException e) {
-            System.out.println("Error getting documents: " + e);
-            return null;
-        }
-    }
-
-    public ResultSet getHistory(int id) {
-        try {
-            resultSet = statement.executeQuery("SELECT * FROM history WHERE id = " + id);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM history");
             return resultSet;
         } catch (SQLException e) {
             System.out.println("Error getting documents: " + e);

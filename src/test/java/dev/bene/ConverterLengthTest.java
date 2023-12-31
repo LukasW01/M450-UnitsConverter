@@ -1,10 +1,11 @@
 package dev.bene;
 
+import dev.bene.converter.Converter;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConverterLengthTest {
-    
+
     private Converter converter;
 
     public ConverterLengthTest() {

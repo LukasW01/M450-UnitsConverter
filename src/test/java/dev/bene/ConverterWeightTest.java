@@ -1,12 +1,13 @@
 package dev.bene;
 
+import dev.bene.converter.Converter;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConverterWeightTest {
-    
+
     private Converter converter;
-    
+
     public ConverterWeightTest() {
         converter = new Converter();
     }

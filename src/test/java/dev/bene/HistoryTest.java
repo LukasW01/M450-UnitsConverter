@@ -1,5 +1,7 @@
 package dev.bene;
 
+import dev.bene.converter.Converter;
+import dev.bene.history.History;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import org.mockito.Mockito;
 import javax.swing.*;
 import static org.mockito.Mockito.*;
 

@@ -1,6 +1,5 @@
-package dev.bene;
+package dev.bene.converter;
 
-import dev.bene.db.MongoDB;
 import dev.bene.db.SQLite;
 import dev.bene.unit.LengthUnit;
 import dev.bene.unit.WeightUnit;
@@ -13,7 +12,6 @@ import java.sql.SQLException;
 public class Converter {
     private Double input, output;
     private String from, to, formula, unit;
-    //private MongoDB mongoDB;
     private SQLite sqlite;
 
     public Converter(double input, double output, String from, String to, String formula, String unit) {
@@ -27,28 +25,45 @@ public class Converter {
 
     public Converter() {
         sqlite = new SQLite();
-        //mongoDB = new MongoDB();
 
         sqlite.connectDB();
     }
 
     public void convertValue(double input, String from, String to, String unit) {
-        Double conversionRatioLength = LengthUnit.getConversionRatio(from, to);
-        Double conversionRatioWeight = WeightUnit.getConversionRatio(from, to);
+        this.input = input;
+        this.from = from;
+        this.to = to;
+        this.unit = unit;
 
-        if (conversionRatioLength != null || conversionRatioWeight != null) {
-            this.input = input;
-            this.from = from;
-            this.to = to;
-            this.unit = unit;
-            this.output = conversionRatioLength != null ? input * conversionRatioLength : input * conversionRatioWeight;
-            this.formula = conversionRatioLength != null ? "input * " + conversionRatioLength  : "input * " + conversionRatioWeight;
-
-            //mongoDB.setHistory(toBSON());
-            sqlite.setHistory(input, output, from, to, formula, unit);
-        } else {
-            JOptionPane.showMessageDialog(null, "Conversion not possible with these units", "Error", JOptionPane.ERROR_MESSAGE);
+        switch (unit) {
+            case "LENGTH" -> {
+                convertLength(input, from, to);
+                setHistory(this);
+            }
+            case "WEIGHT" -> {
+                convertWeight(input, from, to);
+                setHistory(this);
+            }
+            default -> throw new IllegalArgumentException("Unsupported unit type: " + unit);
         }
+    }
+
+    private void convertLength(double input, String from, String to) {
+        Double conversionRatio = LengthUnit.getConversionRatio(from, to);
+        if (conversionRatio == null) {
+            throw new IllegalArgumentException("Conversion not possible with these units");
+        }
+        this.output = input * conversionRatio;
+        this.formula = "input * " + conversionRatio;
+    }
+
+    private void convertWeight(double input, String from, String to) {
+        Double conversionRatio = WeightUnit.getConversionRatio(from, to);
+        if (conversionRatio == null) {
+            throw new IllegalArgumentException("Conversion not possible with these units");
+        }
+        this.output = input * conversionRatio;
+        this.formula = "input * " + conversionRatio;
     }
 
     public Double getInput() {
@@ -75,17 +90,6 @@ public class Converter {
         return unit;
     }
 
-    public Document toBSON() {
-        return new Document()
-                .append("history", true)
-                .append("input", input != null ? input : Double.valueOf(0))
-                .append("output", output != null ? output : Double.valueOf(0))
-                .append("from", from != null ? from : "")
-                .append("to", to != null ? to : "")
-                .append("formula", formula != null ? formula : "")
-                .append("unit", unit != null ? unit : "");
-    }
-
     public void setHistory(Converter converter) {
         sqlite.setHistory(
                 converter.getInput() != null ? converter.getInput() : Double.valueOf(0),
@@ -95,20 +99,6 @@ public class Converter {
                 converter.getFormula() != null ? converter.getFormula() : "",
                 converter.getUnit() != null ? converter.getUnit() : ""
         );
-    }
-
-    public Converter fromBSON(Document doc) {
-        if (!(doc == null)) {
-            return new Converter(
-                    doc.getDouble("input"),
-                    doc.getDouble("output"),
-                    doc.getString("from"),
-                    doc.getString("to"),
-                    doc.getString("formula"),
-                    doc.getString("unit")
-            );
-        }
-        return null;
     }
 
     public Converter getHistory(ResultSet resultSet) {
