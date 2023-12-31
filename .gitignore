@@ -12,3 +12,7 @@ target/
 
 # CSV
 history.csv
+
+#SQlite
+*.sqlite3
+.db
