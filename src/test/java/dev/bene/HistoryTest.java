@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.ResultSet;
 import java.util.List;
 import javax.swing.*;
 import static org.mockito.Mockito.*;
@@ -47,7 +48,7 @@ public class HistoryTest {
     @Test
     public void testExportCSV() {
         //add default data
-        history.addHistory(new Converter(1, 1000, "TON", "KILOGRAM", "input * 1000.0", "WEIGHT"));
+        converter.convertValue(1, "TON", "KILOGRAM", "WEIGHT");
 
         history.exportCSV();
         assertTrue(file.exists());
